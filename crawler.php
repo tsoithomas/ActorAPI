@@ -7,7 +7,7 @@ require_once("./sql.php");
 
 
 $entryUrl = "https://www.imdb.com/chart/top/?ref_=nv_mv_250";
-$domain = "https://www.imdb.com/";
+$domain = "https://www.imdb.com";
 
 $actorcount = 1;
 
@@ -89,8 +89,8 @@ foreach ($movies as $movie) {
         }
 
 
-        $stmt = $mysqli->prepare("REPLACE INTO actors SET actorname=?, birthyear=?, cityid=?");
-        $stmt->bind_param("ssi", $actorName, $birthYear, $cityId);
+        $stmt = $mysqli->prepare("INSERT INTO actors(actorname,birthyear,cityid) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE birthyear=?, cityid=?");
+        $stmt->bind_param("ssisi", $actorName, $birthYear, $cityId, $birthYear, $cityId);
         $stmt->execute();
     }
 
