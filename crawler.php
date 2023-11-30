@@ -58,12 +58,12 @@ foreach ($movies as $movie) {
 
         if (count($birthPlaceParts) == 1) {
             list($country) = $birthPlaceParts;
-            $city = null;
-            $state = null;
+            $city = "";
+            $state = "";
         }
         elseif (count($birthPlaceParts) == 2) {
             list($city, $country) = $birthPlaceParts;
-            $state = null;
+            $state = "";
         }
         else {
             list($city, $state, $country) = $birthPlaceParts;
@@ -72,7 +72,26 @@ foreach ($movies as $movie) {
             $city = implode(", ", array_slice($birthPlaceParts, 0, count($birthPlaceParts)-2));
         }
 
-        echo "$birthYear : $city - $state - $country\n";
+        $stmt = $mysqli->prepare("SELECT cityid FROM cities WHERE city=? AND state=? AND country=?");
+        $stmt->bind_param("sss", $city, $state, $country);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        
+        if ($result->num_rows) {
+            list($cityId) = $result->fetch_row();
+        }
+        else {
+            $stmt = $mysqli->prepare("INSERT INTO cities SET city=?, state=?, country=?");
+            $stmt->bind_param("sss", $city, $state, $country);
+            $stmt->execute();
+            $cityId = $stmt->insert_id;
+        }
+
+
+        $stmt = $mysqli->prepare("REPLACE INTO actors SET actorname=?, birthyear=?, cityid=?");
+        $stmt->bind_param("ssi", $actorName, $birthYear, $cityId);
+        $stmt->execute();
     }
 
 }
