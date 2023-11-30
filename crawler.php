@@ -3,6 +3,7 @@
 use DiDom\Document;
 use DiDom\Query;
 require_once('vendor/autoload.php');
+require_once("./sql.php");
 
 
 $entryUrl = "https://www.imdb.com/chart/top/?ref_=nv_mv_250";
