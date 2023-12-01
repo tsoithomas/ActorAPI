@@ -1,10 +1,18 @@
 <?php
-
+error_reporting(E_ALL ^ E_WARNING); 
 use DiDom\Document;
 use DiDom\Query;
 require_once('vendor/autoload.php');
 require_once("./sql.php");
 
+function readPage($url) {
+    try {
+        $document = new Document($url, true);
+    } catch (Exception $e) {
+        return false;
+    }
+    return $document;
+}
 
 $entryUrl = "https://www.imdb.com/chart/top/?ref_=nv_mv_250";
 $domain = "https://www.imdb.com";
@@ -13,7 +21,13 @@ $actorcount = 1;
 
 # retrieve the entry page
 echo "Retrieving entry page...\n";
-$entryPage = new Document($entryUrl, true);
+
+while (!$entryPage = readPage($entryUrl)) {
+    echo "Page retrieval failed: $entryUrl\n";
+    echo "Retrying...\n";
+    sleep(2);
+}
+#$entryPage = new Document($entryUrl, true);
 $movies = $entryPage->find('.ipc-metadata-list-summary-item .ipc-title-link-wrapper');
 
 # parse for movie links
@@ -24,18 +38,39 @@ foreach ($movies as $movie) {
     $movieUrl = $movie->attr('href');
 
     # retrieve movie page
-    $moviePage = new Document($domain.$movieUrl, true);
+
+    while (!$moviePage = readPage($domain.$movieUrl)) {
+        echo "Page retrieval failed: $domain$movieUrl\n";
+        echo "Retrying...\n";
+        sleep(2);
+    }
+    # $moviePage = new Document($domain.$movieUrl, true);
     $actors = $moviePage->find('*[^data-testid=title-cast-item__actor]');
     
     # parse for actor links
     foreach ($actors as $actor) {
         $actorName = $actor->text();
         echo "[".$actorcount++."] $actorName\n";
+
+        # Skip if actor already exists in db
+        $stmt = $mysqli->prepare("SELECT * FROM actors WHERE actorname=?");
+        $stmt->bind_param("s", $actorName);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows) continue;
+
+
         #echo "Retrieving actors...\n";
         $actorUrl = $actor->attr('href');
 
         # retrieve movie page
-        $actorPage = new Document($domain.$actorUrl, true);
+
+        while (!$actorPage = readPage($domain.$actorUrl)) {
+            echo "Page retrieval failed: $domain$actorUrl\n";
+            echo "Retrying...\n";
+            sleep(2);
+        }
+        # $actorPage = new Document($domain.$actorUrl, true);
         $birthInfoArr = $actorPage->find('*[data-testid=nm_pd_bl]');
 
         # skip if no birth info
