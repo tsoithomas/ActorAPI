@@ -5,7 +5,7 @@ use DiDom\Query;
 require_once('vendor/autoload.php');
 require_once("./sql.php");
 
-function readPage($url) {
+function fetchPage($url) {
     try {
         $document = new Document($url, true);
     } catch (Exception $e) {
@@ -19,40 +19,40 @@ $domain = "https://www.imdb.com";
 
 $actorcount = 1;
 
-# retrieve the entry page
+// retrieve the entry page
 echo "Retrieving entry page...\n";
 
-while (!$entryPage = readPage($entryUrl)) {
+while (!$entryPage = fetchPage($entryUrl)) {
     echo "Page retrieval failed: $entryUrl\n";
     echo "Retrying...\n";
     sleep(2);
 }
-#$entryPage = new Document($entryUrl, true);
+// $entryPage = new Document($entryUrl, true);
 $movies = $entryPage->find('.ipc-metadata-list-summary-item .ipc-title-link-wrapper');
 
-# parse for movie links
+// parse for movie links
 foreach ($movies as $movie) {
     $movieTitle = $movie->text();
     echo $movieTitle ."\n";
     echo "Retrieving actors...\n";
     $movieUrl = $movie->attr('href');
 
-    # retrieve movie page
+    // retrieve movie page
 
-    while (!$moviePage = readPage($domain.$movieUrl)) {
+    while (!$moviePage = fetchPage($domain.$movieUrl)) {
         echo "Page retrieval failed: $domain$movieUrl\n";
         echo "Retrying...\n";
         sleep(2);
     }
-    # $moviePage = new Document($domain.$movieUrl, true);
+    // $moviePage = new Document($domain.$movieUrl, true);
     $actors = $moviePage->find('*[^data-testid=title-cast-item__actor]');
     
-    # parse for actor links
+    // parse for actor links
     foreach ($actors as $actor) {
         $actorName = $actor->text();
         echo "[".$actorcount++."] $actorName\n";
 
-        # Skip if actor already exists in db
+        // Skip if actor already exists in db
         $stmt = $mysqli->prepare("SELECT * FROM actors WHERE actorname=?");
         $stmt->bind_param("s", $actorName);
         $stmt->execute();
@@ -60,31 +60,31 @@ foreach ($movies as $movie) {
         if ($result->num_rows) continue;
 
 
-        #echo "Retrieving actors...\n";
+        //echo "Retrieving actors...\n";
         $actorUrl = $actor->attr('href');
 
-        # retrieve movie page
+        // retrieve movie page
 
-        while (!$actorPage = readPage($domain.$actorUrl)) {
+        while (!$actorPage = fetchPage($domain.$actorUrl)) {
             echo "Page retrieval failed: $domain$actorUrl\n";
             echo "Retrying...\n";
             sleep(2);
         }
-        # $actorPage = new Document($domain.$actorUrl, true);
+        // $actorPage = new Document($domain.$actorUrl, true);
         $birthInfoArr = $actorPage->find('*[data-testid=nm_pd_bl]');
 
-        # skip if no birth info
+        // skip if no birth info
         if (count($birthInfoArr) == 0) continue;
         $birthInfo = $birthInfoArr[0];
 
-        # retrieve action info
+        // retrieve action info
         $birthYearArr = $birthInfo->find('a[href*=/search/name/?birth_year]');
         $birthPlaceArr = $birthInfo->find('.ipc-metadata-list-item__list-content-item');
 
-        # skip if birth year/place not found
+        // skip if birth year/place not found
         if (count($birthYearArr) == 0 || count($birthPlaceArr) == 0) continue;
         
-        # extract birth info
+        // extract birth info
         $birthYear = $birthYearArr[0]->text();
         $birthPlace = $birthPlaceArr[0]->text();
 
