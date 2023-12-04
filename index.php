@@ -14,7 +14,13 @@ require_once("./sql.php");
         $stmt->execute();
         $result = $stmt->get_result();
         while($row = $result->fetch_assoc()) {
-          echo "{lat:".$row["lat"].", lng:".$row["lng"]."},";
+          $parts = array();
+          if ($row["city"] != "") array_push($parts, $row["city"]);
+          if ($row["state"] != "") array_push($parts, $row["state"]);
+          if ($row["country"] != "") array_push($parts, $row["country"]);
+          $title = implode(", ", $parts);
+          
+          echo "{coords: {lat:".$row["lat"].", lng:".$row["lng"]."}, title:\"$title\"},";
         }
       ?>];
     </script>
