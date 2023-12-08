@@ -36,7 +36,7 @@ while ($row = $result->fetch_assoc()) {
         $endPage = $page+2;
     }
 ?>
-    <a class="page<?php if ($startPage==1) echo " disabled"; ?>">≪</a>
+    <a class="page<?php if ($startPage==1) echo " disabled"; ?>" onclick="loadSection('list-container', 'listactors.php?p=<?php echo max($page-5, 1);?>')">≪</a>
 <?php
     for ($i=$startPage; $i<=$endPage; $i++) {
         ?><span class="page<?php if ($i==$page) echo " current"; ?>" onclick="loadSection('list-container', 'listactors.php?p=<?php echo $i;?>')"><?php echo $i;?></span><?php
