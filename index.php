@@ -1,5 +1,4 @@
 <?php
-require_once('vendor/autoload.php');
 require_once("./sql.php");
 ?>
 <html>
@@ -24,11 +23,14 @@ require_once("./sql.php");
 				array_push($parts, $row["country"]);
 			$title = implode(", ", $parts);
 
-			echo "{coords: {lat:" . $row["lat"] . ", lng:" . $row["lng"] . "}, title:\"$title\"},";
+			// echo "{coords: {lat:" . $row["lat"] . ", lng:" . $row["lng"] . "}, title:\"$title\"},";
 		}
 		?>];
 	</script>
-	<script type="module" src="./index.js"></script>
+	<script type="module">
+		import {initMap, addMarker} from "./map.js";
+		initMap();
+	</script>
 	<script src="./lib.js"></script>
 </head>
 

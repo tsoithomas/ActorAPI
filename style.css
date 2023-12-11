@@ -3,113 +3,118 @@
  * that contains the map. 
  */
  #map {
-    height: 100%;
-    flex: 9;
-  }
-  
-  /* 
-   * Optional: Makes the sample page fill the window. 
-   */
-  html,
-  body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
+		height: 100%;
+		flex: 9;
+	}
+	
+	/* 
+	 * Optional: Makes the sample page fill the window. 
+	 */
+	html,
+	body {
+		height: 100%;
+		margin: 0;
+		padding: 0;
+	}
 
 
 .infoTitle {
-  font-size: 16px;
+	font-size: 16px;
 }
 
 
 .flexbox-container {
-  display: -ms-flex;
-  display: -webkit-flex;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  height: 100vh;
+	display: -ms-flex;
+	display: -webkit-flex;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	height: 100dvh;
 }
 
 .flexbox-container #map {
-  margin-right: 0px;
+	margin-right: 0px;
 }
 
 .flexbox-container #list-container {
-  display: flex;
-  flex-direction: column;
-  min-width: 250px;
-  background-color: #eeeeee;
-  height: 100dvh;
+	display: flex;
+	flex-direction: column;
+	min-width: 250px;
+	max-width: 250px;
+	background-color: #eeeeee;
+	height: 100dvh;
 }
 
 .list-content-container {
-  flex: 100;
-  overflow-y: auto;
-  padding: 0 10px;
+	flex: 100;
+	overflow-y: auto;
+	padding: 0 10px;
 }
 
 .list-pagination-container {
-  flex: 1;
-  padding: 10px;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  font-weight: bold;
-  font-size: 12px;
-  display: flex;
-  gap: 2px;
-  justify-content: space-between;
-  
+	flex: 1;
+	padding: 10px;
+	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+	font-weight: bold;
+	font-size: 12px;
+	display: flex;
+	gap: 2px;
+	justify-content: space-between;
+	
 }
 
 
 .actor {
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-  margin: 5px 0;
-  padding: 10px;
-  font-family: Arial, Helvetica, sans-serif;
+	background-color: #ffffff;
+	border: 1px solid #dddddd;
+	border-radius: 5px;
+	margin: 5px 0;
+	padding: 10px;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 .actor:hover {
-  background-color: lightcyan;
-  border-color: lightblue;
+	background-color: lightcyan;
+	border-color: lightblue;
 }
 
 .actor .actorname {
-  font-weight: bold;
-  font-size: 14px;
-  margin-bottom: 5px;
+	font-weight: bold;
+	font-size: 14px;
+	margin-bottom: 5px;
 }
 
 .actor .birthyear {
-  font-size: 12px;
+	font-size: 12px;
+}
+
+.actor .city {
+	font-size: 12px;
 }
 
 .page {
-  background-color: #ffffff;
-  padding: 5px 5px;
-  border-radius: 5px;
-  border: 1px solid #dddddd;
-  line-height: 20px;
-  flex: 1;
-  text-align: center;
-  cursor: pointer;
-  user-select: none;
+	background-color: #ffffff;
+	padding: 5px 5px;
+	border-radius: 5px;
+	border: 1px solid #dddddd;
+	line-height: 20px;
+	flex: 1;
+	text-align: center;
+	cursor: pointer;
+	user-select: none;
 }
 
 .page:hover {
-  background-color: lightcyan;
-  border-color: lightblue;
+	background-color: lightcyan;
+	border-color: lightblue;
 }
 
 .page.current {
-  background-color: navy;
-  color: #ffffff;;
+	background-color: navy;
+	color: #ffffff;;
 }
 
 .page.disabled {
-  background-color: lightgrey;
-  color: gray;
+	background-color: lightgrey;
+	color: gray;
 }

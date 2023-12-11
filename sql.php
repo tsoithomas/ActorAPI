@@ -7,8 +7,8 @@ $mysqli = new mysqli($_ENV["DB_HOST"],$_ENV["DB_USERNAME"],$_ENV["DB_PASSWORD"],
 
 // Check connection
 if ($mysqli -> connect_errno) {
-  echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
-  exit();
+	echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
+	exit();
 }
 
 $mysqli->set_charset("utf8");

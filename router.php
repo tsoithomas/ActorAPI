@@ -34,3 +34,24 @@ $router->addRoute('/test/actorcount/', function () {
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 $router->handleRequest($path);
+
+/*
+https://abc.com/api/?method=actorcount
+
+
+$method=$_GET['method'];
+
+switch ($method){
+case 'actorcount";
+    api_actorcount();
+break;
+
+}
+
+
+function api_actorcount(){
+
+    
+}
+*/
+

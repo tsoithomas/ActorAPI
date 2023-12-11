@@ -1,6 +1,7 @@
 let map;
+let markers = [];
 
-async function initMap() {
+export async function initMap() {
 	const { Map } = await google.maps.importLibrary("maps");
 	const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
@@ -10,7 +11,7 @@ async function initMap() {
 		mapId: "DEMO_MAP_ID",
 	});
 
-  let infowindow = new google.maps.InfoWindow();
+	let infowindow = new google.maps.InfoWindow();
 	for (const loc of locations) {
 		const marker = new AdvancedMarkerElement({
 			map: map,
@@ -19,13 +20,13 @@ async function initMap() {
 		});
 
 
-		marker.addListener("click", () => {
-      const contentString =
+	marker.addListener("click", () => {
+		const contentString =
 			'<div class="infoWindow">' +
 			'<h1 class="infoTitle">' + loc.title +  "</h1>" +
 			'<div class="infoBody">abc</div>' +
 			"</div>";
-      infowindow.setContent(contentString);
+		infowindow.setContent(contentString);
 			infowindow.open({
 				anchor: marker,
 				map,
@@ -34,4 +35,21 @@ async function initMap() {
 	}
 }
 
-initMap();
+// initMap();
+
+export async function addMarker(location) {
+	const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+	const marker = new AdvancedMarkerElement({
+		map: map,
+		position: location,
+		title: "",
+	});
+	markers.push(marker);
+}
+
+export async function clearMarkers() {
+	for (let i = 0; i < markers.length; i++) {
+		markers[i].setMap(null);
+	}
+	markers = [];
+}
