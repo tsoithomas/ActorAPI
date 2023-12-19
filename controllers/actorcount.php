@@ -7,7 +7,9 @@ parse_str($query, $get);
 $response = array();
 
 $accountid = authenticate();
-check_rate($accountid);
+$limits = get_limits($accountid);
+check_rate($accountid, $limits["rate"]);
+check_country($limits["country"]);
 fetch_data();
 
 
@@ -35,8 +37,21 @@ function authenticate() {
 	return $get['accountid'];
 }
 
-function check_rate($accountid) {
-	global $get, $mysqli, $response;
+function get_limits($accountid) {
+	global $mysqli;
+	$limits = array();
+
+	$stmt = $mysqli->prepare("SELECT ratelimit, countrylimit FROM accounts WHERE accountid=?");
+	$stmt->bind_param("i", $accountid);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	list($limits["rate"], $limits["country"]) = $result->fetch_row();
+
+	return $limits;
+}
+
+function check_rate($accountid, $ratelimit) {
+	global $mysqli;
 
 	$stmt = $mysqli->prepare("SELECT COUNT(*) FROM calls WHERE accountid=? AND calltime> DATE_ADD(NOW(), INTERVAL -1 MINUTE)");
 	$stmt->bind_param("i", $accountid);
@@ -44,13 +59,13 @@ function check_rate($accountid) {
 	$result = $stmt->get_result();
 	list($minute_rate) = $result->fetch_row();
 
-	$stmt = $mysqli->prepare("SELECT ratelimit FROM accounts WHERE accountid=?");
-	$stmt->bind_param("i", $accountid);
-	$stmt->execute();
-	$result = $stmt->get_result();
-	list($ratelimit) = $result->fetch_row();
-
 	if ($ratelimit != 0 && $minute_rate >= $ratelimit) return_json(429);
+}
+
+function check_country($countrylimit) {
+	global $get;
+
+	if ($countrylimit != "" && $countrylimit != $get["country"]) return_json(406);
 }
 
 function fetch_data() {

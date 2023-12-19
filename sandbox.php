@@ -68,7 +68,6 @@ body {
 	font-size: 12px; 
 	background: #dddddd;
 }
-
 .json:not(:empty) {
 	padding: 10px;
 	border-radius: 10px;
