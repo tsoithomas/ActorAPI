@@ -2,6 +2,21 @@
 <head>
     <title>API Sandbox</title>
 </head>
+
+<style>
+.json {
+    font-family: 'Courier New', Courier, monospace; 
+    font-size: 12px; 
+    background: #dddddd;
+}
+
+.json:not(:empty) {
+    padding: 10px;
+    border-radius: 10px;
+}
+</style>
+
+
 <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js" integrity="sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
@@ -42,7 +57,7 @@ async function fetchAPI() {
     <button onClick="fetchAPI()">Fetch</button>
 </div>
 
-<pre id="result" style="font-family: 'Courier New', Courier, monospace; font-size: 12px; background: #dddddd"></pre>
+<pre id="result" class="json"></pre>
 
 
 
