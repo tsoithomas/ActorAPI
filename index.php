@@ -7,7 +7,7 @@ require_once("./sql.php");
 	<title>Actors Map</title>
 	<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
-	<link rel="icon" href="/favicon.ico">
+	<link rel="icon" href="favicon.ico">
 	<link rel="stylesheet" type="text/css" href="./style.css" />
 	<script>
 		locations = [<?php
