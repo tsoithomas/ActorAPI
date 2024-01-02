@@ -1,6 +1,7 @@
 <html>
 <head>
 	<title>API Sandbox</title>
+	<link rel="icon" href="favicon.ico">
 </head>
 
 <style>
